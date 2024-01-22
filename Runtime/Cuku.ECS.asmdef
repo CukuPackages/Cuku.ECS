@@ -1,0 +1,23 @@
+{
+    "name": "Cuku.ECS",
+    "rootNamespace": "",
+    "references": [
+        "GUID:84651a3751eca9349aac36a66bba901b",
+        "GUID:f51ebe6a0ceec4240a699833d6309b23",
+        "GUID:593a5b492d29ac6448b1ebf7f035ef33",
+        "GUID:9ead6618d585fb54bb8f2a5a53e0fb67",
+        "GUID:8e6324bb4365c4c53bf3e425d4d4e27c",
+        "GUID:00f0939e3314f47b788b3472c4d16774"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [
+        "nunit.framework.dll"
+    ],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
