@@ -119,12 +119,11 @@ namespace Cuku.ECS
         /// </summary>
         public static async void LoadEntitiesAsync(string key)
         {
-            var asset = await key.LoadAsset<UnityEngine.TextAsset>();
-            foreach (var contextData in DeserializeContexs(asset.Value.text))
+            var data = await key.LoadTextAsync();
+            foreach (var contextData in DeserializeContexs(data))
             {
                 contextData.GetContext().CreateEntities(contextData.Entities);
             }
-            asset.Key.UnloadAsset();
         }
 
         /// <summary>
