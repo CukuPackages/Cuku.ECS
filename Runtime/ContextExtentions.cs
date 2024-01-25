@@ -11,37 +11,83 @@ namespace Cuku.ECS
 {
     /// <summary>
     /// Provides <see cref="IContext"/> related utilities such as creating entities
-    /// and serializing and deserializing contexts with entities and components.
+    /// and serializing and deserializing contextTypes with entities and componentTypes.
     /// </summary>
     public static class ContextExtentions
     {
         #region Context
 
-        private static string contextInstanceMethod = "get_Instance";
-        private static string contextCreateEntityMethod = "CreateEntity";
-        private static string contextGetEntitiesMethod = "GetEntities";
+        private static string contextInstanceMethodName = "get_Instance";
+        private static string createEntityMethodName = "CreateEntity";
+        private static string getEntitiesMethodName = "GetEntities";
 
-        private static Type[] contexts;
-
+        private static Type[] contextTypes;
 
         static ContextExtentions()
         {
-            contexts = AppDomain.CurrentDomain.GetAssemblies()
+            contextTypes = AppDomain.CurrentDomain.GetAssemblies()
                 .SelectMany(assembly => assembly.GetTypes())
-                .Where(type => typeof(IContext).IsAssignableFrom(type) && !type.IsInterface)
+                .Where(type => typeof(IContext).IsAssignableFrom(type) && !type.IsInterface && !type.IsGenericTypeDefinition)
                 .ToArray();
         }
 
         /// <summary>
         /// Find contextType by name.
         /// </summary>
-        public static Type GetContext(this ContextData data) => GetContext(data.Context);
+        public static Type ContextType(this ContextData data)
+            => Array.Find(contextTypes, match => match.Name == data.Context);
+
+        public static Dictionary<string, IComponent[][]> GetArchetypes()
+        {
+            var contextArchetypes = new Dictionary<string, IComponent[][]>();
+            foreach (var contextType in contextTypes)
+            {
+                // Get archetypes as indexes
+                var archetypeIndexes = new HashSet<int[]>(new ArrayEqualityComparer<int>());
+                var contextInstance = contextType.Instance();
+                var getEntitiesMethod = contextType.GetEntitiesMethod();
+
+                foreach (var entity in (Entity[])getEntitiesMethod.Invoke(contextInstance, null))
+                {
+                    archetypeIndexes.Add(entity.GetComponentIndexes());
+                }
+
+                // Get archtypes as components
+                var componentTypes = ((IContext)contextInstance).ContextInfo.ComponentTypes;
+                var archteypeComponents = new IComponent[archetypeIndexes.Count][];
+
+                var archetypeCount = 0;
+                foreach (var archetype in archetypeIndexes)
+                {
+                    var components = new IComponent[archetype.Length];
+                    for (int i = 0; i < archetype.Length; i++)
+                    {
+                        components[i] = Activator.CreateInstance(componentTypes[archetype[i]]) as IComponent;
+                    }
+                    archteypeComponents[archetypeCount] = components;
+                    archetypeCount++;
+                }
+
+                contextArchetypes.Add(contextType.Name, archteypeComponents);
+            }
+
+            return contextArchetypes;
+        }
 
         /// <summary>
-        /// Find Context Type by name.
+        /// Get Context Instance from Context Type.
         /// </summary>
-        public static Type GetContext(string context)
-            => Array.Find(contexts, match => match.Name == context);
+        private static object Instance(this Type contextType)
+        {
+            var context = Activator.CreateInstance(contextType);
+            var instanceMethod = context.GetType().GetMethod(contextInstanceMethodName, BindingFlags.Static | BindingFlags.Public);
+            return instanceMethod.Invoke(context, null);
+        }
+
+        private static MethodInfo GetEntitiesMethod(this Type contextType)
+            => Activator.CreateInstance(contextType)
+                    .GetType().GetMethods()
+                    .FirstOrDefault(m => m.Name == getEntitiesMethodName && m.GetParameters().Length == 0);
 
         #endregion Context
 
@@ -51,7 +97,7 @@ namespace Cuku.ECS
         /// Create <see cref="Entity"/> in <paramref name="context"/>.
         /// </summary>
         public static Entity CreateEntity(this IContext context)
-            => (Entity)context.GetType().GetMethod(contextCreateEntityMethod).Invoke(context, null);
+            => (Entity)context.GetType().GetMethod(createEntityMethodName).Invoke(context, null);
 
         /// <summary>
         /// Create <see cref="Entity"/> in <paramref name="context"/>
@@ -85,16 +131,15 @@ namespace Cuku.ECS
         public static Entity[] CreateEntities(this Type contextType, int count)
         {
             var entities = new Entity[count];
+
+            var contextInstance = contextType.Instance();
+
             var context = Activator.CreateInstance(contextType);
-
-            var instanceMethod = context.GetType().GetMethod(contextInstanceMethod, BindingFlags.Static | BindingFlags.Public);
-            var contextInstance = instanceMethod.Invoke(context, null);
-
-            var creationMethod = context.GetType().GetMethod(contextCreateEntityMethod);
+            var createEntityMethod = context.GetType().GetMethod(createEntityMethodName);
 
             for (int i = 0; i < count; i++)
             {
-                entities[i] = (Entity)creationMethod.Invoke(contextInstance, null);
+                entities[i] = (Entity)createEntityMethod.Invoke(contextInstance, null);
             }
             return entities;
         }
@@ -103,7 +148,7 @@ namespace Cuku.ECS
         /// Get <see cref="Entity"/> colleciton in <paramref name="context"/>.
         /// </summary>
         public static Entity[] GetEntities(this IContext context)
-            => (Entity[])context.GetType().GetMethod(contextGetEntitiesMethod).Invoke(context, null);
+            => (Entity[])context.GetType().GetEntitiesMethod().Invoke(context, null);
 
         #endregion Entity
 
@@ -115,14 +160,14 @@ namespace Cuku.ECS
         };
 
         /// <summary>
-        /// Deserialize contexts from Json asset and create their entities.
+        /// Deserialize contextTypes from Json asset and create their entities.
         /// </summary>
         public static async void LoadEntitiesAsync(string key)
         {
             var data = await key.LoadTextAsync();
             foreach (var contextData in DeserializeContexs(data))
             {
-                contextData.GetContext().CreateEntities(contextData.Entities);
+                contextData.ContextType().CreateEntities(contextData.Entities);
             }
         }
 

@@ -1,6 +1,6 @@
 {
   "name": "com.cuku.ecs",
-  "version": "24.1.23",
+  "version": "24.1.25",
   "displayName": "Cuku.ECS",
   "description": "ECS Extensions.",
   "unity": "2023.3",
