@@ -37,8 +37,7 @@ namespace Cuku.ECS
             {
                 var component = components[i];
                 var index = Array.IndexOf(componentTypes, component.GetType());
-
-                if (-1 < index && !entity.HasComponent(index))
+                if (!entity.HasComponent(index))
                 {
                     entity.AddComponent(index, component);
                 }
@@ -48,7 +47,7 @@ namespace Cuku.ECS
         /// <summary>
         /// Add components matched by <paramref name="indices"/> to <paramref name="entity"/>.
         /// </summary>
-        /// <param name="indices">Component indices in the <paramref name="componentTypes"/>.</param>
+        /// <param name="indices">Component indices in the <paramref name="ComponentTypes"/>.</param>
         public static void AddComponents(this Entity entity, int[] indices)
         {
             var componentTypes = entity.ContextInfo.ComponentTypes;
@@ -56,7 +55,6 @@ namespace Cuku.ECS
             {
                 var index = indices[i];
                 var component = entity.CreateComponent(index, componentTypes[index]);
-
                 if (!entity.HasComponent(index))
                 {
                     entity.AddComponent(index, component);
@@ -65,7 +63,7 @@ namespace Cuku.ECS
         }
 
         /// <summary>
-        /// Replace <paramref name="components"/> to <paramref name="entity"/>.
+        /// Replace <paramref name="components"/> of <paramref name="entity"/>.
         /// </summary>
         public static void ReplaceComponents(this Entity entity, params IComponent[] components)
         {
@@ -74,10 +72,26 @@ namespace Cuku.ECS
             {
                 var component = components[i];
                 var index = Array.IndexOf(componentTypes, component.GetType());
-
-                if (-1 < index && !entity.HasComponent(index))
+                if (!entity.HasComponent(index))
                 {
                     entity.ReplaceComponent(index, component);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Remove <paramref name="components"/> to <paramref name="entity"/>.
+        /// </summary>
+        public static void RemoveComponents(this Entity entity, params IComponent[] components)
+        {
+            var componentTypes = entity.ContextInfo.ComponentTypes;
+            for (int i = 0; i < components.Length; i++)
+            {
+                var component = components[i];
+                var index = Array.IndexOf(componentTypes, component.GetType());
+                if (entity.HasComponent(index))
+                {
+                    entity.RemoveComponent(index);
                 }
             }
         }
@@ -90,10 +104,8 @@ namespace Cuku.ECS
             var remainderComponents = new List<IComponent>();
             for (int i = 0; i < entities.Length; i++)
             {
-                remainderComponents.AddRange(
-                    entities[i].SubtractComponents(indices));
+                remainderComponents.AddRange(entities[i].SubtractComponents(indices));
             }
-
             return remainderComponents;
         }
 
