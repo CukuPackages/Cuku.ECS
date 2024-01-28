@@ -63,23 +63,6 @@ namespace Cuku.ECS
         }
 
         /// <summary>
-        /// Replace <paramref name="components"/> of <paramref name="entity"/>.
-        /// </summary>
-        public static void ReplaceComponents(this Entity entity, params IComponent[] components)
-        {
-            var componentTypes = entity.ContextInfo.ComponentTypes;
-            for (int i = 0; i < components.Length; i++)
-            {
-                var component = components[i];
-                var index = Array.IndexOf(componentTypes, component.GetType());
-                if (!entity.HasComponent(index))
-                {
-                    entity.ReplaceComponent(index, component);
-                }
-            }
-        }
-
-        /// <summary>
         /// Remove <paramref name="components"/> to <paramref name="entity"/>.
         /// </summary>
         public static void RemoveComponents(this Entity entity, params IComponent[] components)
@@ -92,6 +75,23 @@ namespace Cuku.ECS
                 if (entity.HasComponent(index))
                 {
                     entity.RemoveComponent(index);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Replace <paramref name="components"/> of <paramref name="entity"/>.
+        /// </summary>
+        public static void ReplaceComponents(this Entity entity, params IComponent[] components)
+        {
+            var componentTypes = entity.ContextInfo.ComponentTypes;
+            for (int i = 0; i < components.Length; i++)
+            {
+                var component = components[i];
+                var index = Array.IndexOf(componentTypes, component.GetType());
+                if (!entity.HasComponent(index))
+                {
+                    entity.ReplaceComponent(index, component);
                 }
             }
         }
