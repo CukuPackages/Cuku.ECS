@@ -33,7 +33,7 @@ namespace Cuku.ECS
         [DisableIf(nameof(FileIsNotValid))]
         private void Load()
         {
-            var contexts = Context.DeserializeContexs(File.ReadAllText(EntitiesFile));
+            var contexts = ContextExtentions.DeserializeContexs(File.ReadAllText(EntitiesFile));
             foreach (var context in contexts)
             {
                 var contextId = -1;
@@ -71,7 +71,7 @@ namespace Cuku.ECS
                 extension: format);
             if (string.IsNullOrEmpty(path)) return;
 
-            File.WriteAllText(path, Context.SerializeContextsData(contextsData: ContextsData.ToArray()));
+            File.WriteAllText(path, ContextExtentions.SerializeContextsData(contextsData: ContextsData.ToArray()));
         }
 
         private bool FileIsNotValid()
@@ -86,22 +86,22 @@ namespace Cuku.ECS
 
         #region Entities
 
-        [PropertySpace(20), PropertyOrder(2), LabelText(nameof(Contexts))]
+        [PropertySpace(20), PropertyOrder(2), LabelText(nameof(ContextExtentions.Contexts))]
         [ValueDropdown(nameof(AvailableContexts), ExcludeExistingValuesInList = true, DrawDropdownForListElements = false)]
         public List<ContextData> ContextsData = new List<ContextData>();
 
         private ValueDropdownList<ContextData> AvailableContexts()
         {
-            var contexts = Contexts.sharedInstance.allContexts
+            var contexts = ContextExtentions.Contexts()
                 // Skip existing contexts and those without any component
-                .Where(context => !ContextsData.Any(contextData => contextData.Context == context.contextInfo.name)
-                    && context.contextInfo.componentTypes.Length > 0)
+                .Where(context => !ContextsData.Any(contextData => contextData.Context == context.ContextInfo.Name)
+                    && context.ContextInfo.ComponentTypes.Length > 0)
                 .Select(context => new ContextData()
                 {
-                    Context = context.contextInfo.name,
+                    Context = context.ContextInfo.Name,
                     Entities = new IComponent[][]
                     {
-                        new IComponent[] { (IComponent)Activator.CreateInstance(context.contextInfo.componentTypes[0]) }
+                        new IComponent[] { (IComponent)Activator.CreateInstance(context.ContextInfo.ComponentTypes[0]) }
                     }
                 });
 

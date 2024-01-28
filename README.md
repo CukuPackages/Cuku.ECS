@@ -9,3 +9,7 @@ ECS Extensions.
 [Assets](https://github.com/CukuHub/Assets.git)
 
 [Entitas](https://github.com/sschmid/Entitas)
+
+# Instructions
+[!IMPORTANT]
+Must be in Play mode so that the Editors can work correctly!

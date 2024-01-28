@@ -50,9 +50,7 @@ namespace Cuku.ECS
         private IEnumerable<IComponent> Components()
         {
             var components = new List<IComponent>();
-            var componentTypes = ECS.Context.GetContext(Context).contextInfo.componentTypes;
-
-            foreach (var componentType in componentTypes)
+            foreach (var componentType in ComponentTypes())
             {
                 components.Add((IComponent)Activator.CreateInstance(componentType));
             }
@@ -62,6 +60,7 @@ namespace Cuku.ECS
         private void ValidateEntities()
         {
             duplicateComponents = false;
+            var componentTypes = ComponentTypes();
 
             for (int i = 0; i < Entities.Length; i++)
             {
@@ -76,8 +75,7 @@ namespace Cuku.ECS
                 {
                     if (Entities[i][j] == null)
                     {
-                        Entities[i][j] = (IComponent)Activator.CreateInstance(
-                            ECS.Context.GetContext(Context).contextInfo.componentTypes[0]);
+                        Entities[i][j] = (IComponent)Activator.CreateInstance(componentTypes[0]);
                     }
                 }
             }
@@ -103,6 +101,9 @@ namespace Cuku.ECS
                 }
             }
         }
+
+        private Type[] ComponentTypes()
+            => ((IContext)this.ContextType().Instance()).ContextInfo.ComponentTypes;
 #endif
     }
 }

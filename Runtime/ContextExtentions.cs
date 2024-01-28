@@ -31,11 +31,31 @@ namespace Cuku.ECS
                 .ToArray();
         }
 
+        public static IContext[] Contexts()
+        {
+            var contexts = new IContext[contextTypes.Length];
+            for (int i = 0; i < contextTypes.Length; i++)
+            {
+                contexts[i] = (IContext)contextTypes[i].Instance();
+            }
+            return contexts;
+        }
+
+        /// <summary>
+        /// Get Context Instance from Context Type.
+        /// </summary>
+        public static object Instance(this Type contextType)
+        {
+            var context = Activator.CreateInstance(contextType);
+            var instanceMethod = context.GetType().GetMethod(contextInstanceMethodName, BindingFlags.Static | BindingFlags.Public);
+            return instanceMethod.Invoke(context, null);
+        }
+
         /// <summary>
         /// Find contextType by name.
         /// </summary>
         public static Type ContextType(this ContextData data)
-            => Array.Find(contextTypes, match => match.Name == data.Context);
+            => Array.Find(contextTypes, match => match.FullName == data.Context);
 
         public static Dictionary<string, IComponent[][]> GetArchetypes()
         {
@@ -72,16 +92,6 @@ namespace Cuku.ECS
             }
 
             return contextArchetypes;
-        }
-
-        /// <summary>
-        /// Get Context Instance from Context Type.
-        /// </summary>
-        private static object Instance(this Type contextType)
-        {
-            var context = Activator.CreateInstance(contextType);
-            var instanceMethod = context.GetType().GetMethod(contextInstanceMethodName, BindingFlags.Static | BindingFlags.Public);
-            return instanceMethod.Invoke(context, null);
         }
 
         private static MethodInfo GetEntitiesMethod(this Type contextType)

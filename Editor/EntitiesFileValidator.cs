@@ -90,7 +90,7 @@ namespace Cuku.ECS
                     return;
                 }
                 // Verify that Context exists
-                if (Context.GetContext(context.Context) == null)
+                if (context.ContextType() == null)
                 {
                     ContextsAreValid.Issue = $"Context {context.Context} at position [{c}] doesn't exist!";
                     ContextsAreValid.Valid = false;
