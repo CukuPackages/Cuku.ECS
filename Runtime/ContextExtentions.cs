@@ -57,9 +57,9 @@ namespace Cuku.ECS
         public static Type ContextType(this ContextData data)
             => Array.Find(contextTypes, match => match.FullName == data.Context);
 
-        public static Dictionary<string, IComponent[][]> GetArchetypes()
+        public static Dictionary<string, IComponent[]> GetArchetypes()
         {
-            var contextArchetypes = new Dictionary<string, IComponent[][]>();
+            var contextArchetypes = new Dictionary<string, IComponent[]>();
             foreach (var contextType in contextTypes)
             {
                 // Get archetypes as indexes
@@ -74,7 +74,7 @@ namespace Cuku.ECS
 
                 // Get archtypes as components
                 var componentTypes = ((IContext)contextInstance).ContextInfo.ComponentTypes;
-                var archteypeComponents = new IComponent[archetypeIndexes.Count][];
+                var archteypeComponents = new IComponent[archetypeIndexes.Count];
 
                 var archetypeCount = 0;
                 foreach (var archetype in archetypeIndexes)
@@ -84,7 +84,7 @@ namespace Cuku.ECS
                     {
                         components[i] = Activator.CreateInstance(componentTypes[archetype[i]]) as IComponent;
                     }
-                    archteypeComponents[archetypeCount] = components;
+                    archteypeComponents = components;
                     archetypeCount++;
                 }
 
@@ -94,10 +94,10 @@ namespace Cuku.ECS
             return contextArchetypes;
         }
 
-        private static MethodInfo GetEntitiesMethod(this Type contextType)
+        private static MethodInfo GetEntitiesMethod(this Type contextType, int parameters = 0)
             => Activator.CreateInstance(contextType)
                     .GetType().GetMethods()
-                    .FirstOrDefault(m => m.Name == getEntitiesMethodName && m.GetParameters().Length == 0);
+                    .FirstOrDefault(m => m.Name == getEntitiesMethodName && m.GetParameters().Length == parameters);
 
         #endregion Context
 
