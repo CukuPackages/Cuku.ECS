@@ -11,5 +11,7 @@ ECS Extensions.
 [Entitas](https://github.com/sschmid/Entitas)
 
 # Instructions
-[!IMPORTANT]
-Must be in Play mode so that the Editors can work correctly!
+> [!IMPORTANT]
+> Contexts must be initialized before opening ECS - Entities Editor.
+> 
+> To do this create an Editor Script that calls on Editor start the partial class ContextInitialization which initializes the contexts (create on project level).
