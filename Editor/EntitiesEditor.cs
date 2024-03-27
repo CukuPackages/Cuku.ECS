@@ -6,7 +6,6 @@ using Sirenix.OdinInspector;
 using Sirenix.Utilities;
 using System.Collections.Generic;
 using Entitas;
-using System;
 using System.Linq;
 
 namespace Cuku.ECS
@@ -33,7 +32,7 @@ namespace Cuku.ECS
         [DisableIf(nameof(FileIsNotValid))]
         private void Load()
         {
-            var contexts = ContextExtentions.DeserializeContexs(File.ReadAllText(EntitiesFile));
+            var contexts = File.ReadAllText(EntitiesFile).DeserializeContexts();
             foreach (var context in contexts)
             {
                 var contextId = -1;
@@ -46,7 +45,7 @@ namespace Cuku.ECS
                     }
                 }
 
-                // Add entities to matching context
+                // Add entities to matching Context
                 if (contextId != -1)
                 {
                     var contextData = ContextsData[contextId];
@@ -71,7 +70,7 @@ namespace Cuku.ECS
                 extension: format);
             if (string.IsNullOrEmpty(path)) return;
 
-            File.WriteAllText(path, ContextExtentions.SerializeContextsData(contextsData: ContextsData.ToArray()));
+            File.WriteAllText(path, Serialization.SerializeContextsData(contextsData: ContextsData.ToArray()));
         }
 
         private bool FileIsNotValid()
@@ -101,15 +100,14 @@ namespace Cuku.ECS
                     Context = context.ContextInfo.Name,
                     Entities = new IComponent[][]
                     {
-                        new IComponent[] { (IComponent)Activator.CreateInstance(context.ContextInfo.ComponentTypes[0]) }
+                        new IComponent[] { (IComponent)System.Activator.CreateInstance(context.ContextInfo.ComponentTypes[0]) }
                     }
                 });
 
             var valueDropdownList = new ValueDropdownList<ContextData>();
             foreach (var context in contexts)
-            {
                 valueDropdownList.Add(context.Context, context);
-            }
+
             return valueDropdownList;
         }
 
