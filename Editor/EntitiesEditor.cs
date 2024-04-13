@@ -85,13 +85,13 @@ namespace Cuku.ECS
 
         #region Entities
 
-        [PropertySpace(20), PropertyOrder(2), LabelText(nameof(ContextExtentions.Contexts))]
+        [PropertySpace(20), PropertyOrder(2), LabelText(nameof(ContextExtensions.Contexts))]
         [ValueDropdown(nameof(AvailableContexts), ExcludeExistingValuesInList = true, DrawDropdownForListElements = false)]
         public List<ContextData> ContextsData = new List<ContextData>();
 
         private ValueDropdownList<ContextData> AvailableContexts()
         {
-            var contexts = ContextExtentions.Contexts()
+            var contexts = ContextExtensions.Contexts()
                 // Skip existing contexts and those without any component
                 .Where(context => !ContextsData.Any(contextData => contextData.Context == context.ContextInfo.Name)
                     && context.ContextInfo.ComponentTypes.Length > 0)

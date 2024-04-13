@@ -37,7 +37,7 @@ namespace Cuku.ECS
         [ValueDropdown(nameof(Components))]
 #endif
         /// <summary>
-        /// Entities are collection of components.
+        /// Entities are collection of Components.
         /// </summary>
         public IComponent[][] Entities;
 
@@ -70,7 +70,7 @@ namespace Cuku.ECS
                     Entities[i] = new IComponent[1];
                 }
 
-                // Initialize null components
+                // Initialize null Components
                 for (int j = 0; j < Entities[i].Length; j++)
                 {
                     if (Entities[i][j] == null)
@@ -84,7 +84,7 @@ namespace Cuku.ECS
             {
                 for (int i = 0; i < entity.Length; i++)
                 {
-                    // Verify that there are no duplicate components
+                    // Verify that there are no duplicate Components
                     var componentTypeCount = 0;
                     foreach (var otherComponent in entity)
                     {

@@ -11,7 +11,7 @@ namespace Cuku.ECS
     /// Provides <see cref="IContext"/> related utilities such as creating entities
     /// and serializing and deserializing contextTypes with entities and componentTypes.
     /// </summary>
-    public static class ContextExtentions
+    public static class ContextExtensions
     {
         #region Context
 
@@ -21,7 +21,7 @@ namespace Cuku.ECS
 
         private static Type[] contextTypes;
 
-        static ContextExtentions()
+        static ContextExtensions()
         {
             contextTypes = AppDomain.CurrentDomain.GetAssemblies()
                 .SelectMany(assembly => assembly.GetTypes())
@@ -76,7 +76,7 @@ namespace Cuku.ECS
                     archetypeIndexes.Add(entity.GetComponentIndexes());
                 }
 
-                // Get archtypes as components
+                // Get archtypes as Components
                 var componentTypes = ((IContext)contextInstance).ContextInfo.ComponentTypes;
                 var archteypeComponents = new IComponent[archetypeIndexes.Count];
 

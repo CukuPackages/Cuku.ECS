@@ -144,7 +144,7 @@ namespace Cuku.ECS
                         }
                     }
 
-                    // Verify that there are no duplicate components
+                    // Verify that there are no duplicate Components
                     for (int i = 0; i < components.Length; i++)
                     {
                         var componentTypeCount = 0;

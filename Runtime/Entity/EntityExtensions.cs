@@ -8,9 +8,9 @@ namespace Cuku.ECS
 {
     /// <summary>
     /// Provides <see cref="Entity"/> related utilities such as
-    /// adding, removing and replacing components.
+    /// adding, removing and replacing Components.
     /// </summary>
-    public static class EntityExtentions
+    public static class EntityExtensions
     {
         public static bool HasComponent(this Entity entity, IComponent component)
             => entity.HasComponent(Array.IndexOf(entity.ContextInfo.ComponentTypes, component.GetType()));
@@ -45,7 +45,7 @@ namespace Cuku.ECS
         }
 
         /// <summary>
-        /// Add components matched by <paramref name="indices"/> to <paramref name="entity"/>.
+        /// Add Components matched by <paramref name="indices"/> to <paramref name="entity"/>.
         /// </summary>
         /// <param name="indices">Component indices in the <paramref name="ComponentTypes"/>.</param>
         public static void AddComponents(this Entity entity, int[] indices)
@@ -97,7 +97,7 @@ namespace Cuku.ECS
         }
 
         /// <summary>
-        /// Subtract components with <paramref name="indices"/> from <paramref name="entities"/>.
+        /// Subtract Components with <paramref name="indices"/> from <paramref name="entities"/>.
         /// </summary>
         public static List<IComponent> SubtractComponents(this Entity[] entities, params int[] indices)
         {
@@ -110,7 +110,7 @@ namespace Cuku.ECS
         }
 
         /// <summary>
-        /// Subtract components with <paramref name="indices"/> from <paramref name="entity"/>.
+        /// Subtract Components with <paramref name="indices"/> from <paramref name="entity"/>.
         /// </summary>
         public static IComponent[] SubtractComponents(this Entity entity, params int[] indices)
         {

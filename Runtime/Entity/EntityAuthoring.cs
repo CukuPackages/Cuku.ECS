@@ -1,77 +1,30 @@
-#if CUKU_ECS && ODIN_INSPECTOR
-using Entitas;
-using Sirenix.OdinInspector;
-using System.Collections.Generic;
-using System;
-using System.Linq;
+#if CUKU_ECS
 using UnityEngine;
+using Entitas;
+using System;
 
 namespace Cuku.ECS
 {
-    public class EntityAuthoring : SerializedMonoBehaviour
+    public class EntityAuthoring : MonoBehaviour
     {
-        [PropertySpace(20), OnValueChanged(nameof(ClearComponents), true)]
-        [ValueDropdown(nameof(AvailableContexts), ExcludeExistingValuesInList = true, DrawDropdownForListElements = false)]
         public string Context;
 
-        [PropertySpace(20)]
-        [ShowIf(nameof(IsValidContext))]
-        [ValueDropdown(nameof(AvaliableComponents), ExcludeExistingValuesInList = true, ExpandAllMenuItems = true)]
-        [InfoBox("Only one Component Type per Entity is allowed!", InfoMessageType.Error,
-            VisibleIf = nameof(DuplicateComponents))]
-        public IComponent[] Components = new IComponent[0];
+        [SerializeReference, SubclassSelector]
+        public IComponent[] Components = Array.Empty<IComponent>();
+
+        [SerializeField, Tooltip("Destroy after Entity is created")]
+        bool destroy = true;
 
         private void Start()
         {
-            Context.ToContext().CreateEntity(Components);
-            GameObject.Destroy(this);
-        }
-
-        private ValueDropdownList<string> AvailableContexts()
-        {
-            var contexts = ContextExtentions.Contexts()
-                .Select(context => context.ContextInfo.Name);
-            var valueDropdownList = new ValueDropdownList<string>();
-            foreach (var context in contexts)
-                valueDropdownList.Add(context);
-            return valueDropdownList;
-        }
-
-        private bool IsValidContext() => !string.IsNullOrEmpty(Context);
-
-        private void ClearComponents() => Components = new IComponent[0];
-
-        private IEnumerable<IComponent> AvaliableComponents()
-        {
-            if (!IsValidContext())
-                return Enumerable.Empty<IComponent>();
-
-            return (from componentType in ComponentTypes()
-                    select (IComponent)Activator.CreateInstance(componentType)).ToList();
-        }
-
-        private bool DuplicateComponents()
-        {
-            if (!IsValidContext() || Components == null)
-                return false;
-
-            foreach (var component in Components)
+            if (string.IsNullOrEmpty(Context))
             {
-                // Verify that there are no duplicate components
-                var componentTypeCount = 0;
-                foreach (var otherComponent in Components)
-                {
-                    if (otherComponent.GetType() == component.GetType())
-                        componentTypeCount++;
-                    if (componentTypeCount > 1)
-                        return true;
-                }
+                Debug.LogError("Context is not set!");
+                return;
             }
-            return false;
+            Context.ToContext().CreateEntity(Components);
+            if (destroy) Destroy(this.gameObject);
         }
-
-        private Type[] ComponentTypes()
-            => Context.ToContext().ContextInfo.ComponentTypes;
     }
 }
 #endif
