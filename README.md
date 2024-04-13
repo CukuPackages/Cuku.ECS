@@ -2,13 +2,15 @@
 ECS Extensions.
 
 # Dependencies
-[Newtonsoft Json](https://docs.unity3d.com/Packages/com.unity.nuget.newtonsoft-json@latest)
+[Entitas](https://github.com/sschmid/Entitas)
+
+[Unity SerializeReferenceExtensions](https://github.com/mackysoft/Unity-SerializeReferenceExtensions)
 
 [UniTask](https://github.com/Cysharp/UniTask?path=src/UniTask/Assets/Plugins/UniTask)
 
-[Assets](https://github.com/CukuHub/Assets.git)
+[Newtonsoft Json](https://docs.unity3d.com/Packages/com.unity.nuget.newtonsoft-json@latest)
 
-[Entitas](https://github.com/sschmid/Entitas)
+[Assets](https://github.com/CukuHub/Assets.git)
 
 # Instructions
 > [!IMPORTANT]
