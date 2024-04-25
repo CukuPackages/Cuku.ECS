@@ -1,4 +1,3 @@
-#if CUKU_ECS
 namespace Cuku.ECS
 {
     /// <summary>
@@ -6,4 +5,3 @@ namespace Cuku.ECS
     /// </summary>
     public class SerializableAttribute : System.Attribute { }
 }
-#endif

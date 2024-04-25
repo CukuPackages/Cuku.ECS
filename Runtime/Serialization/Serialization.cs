@@ -1,4 +1,4 @@
-#if CUKU_ECS
+#if ODIN_INSPECTOR
 using Entitas;
 using Newtonsoft.Json;
 using Sirenix.Utilities;

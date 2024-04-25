@@ -1,4 +1,3 @@
-#if CUKU_ECS
 using Entitas;
 using System;
 using System.Collections.Generic;
@@ -167,4 +166,3 @@ namespace Cuku.ECS
         #endregion Entity
     }
 }
-#endif

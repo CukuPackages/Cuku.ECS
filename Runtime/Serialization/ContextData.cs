@@ -1,4 +1,3 @@
-#if CUKU_ECS
 using Entitas;
 #if UNITY_EDITOR && ODIN_INSPECTOR
 using Sirenix.OdinInspector;
@@ -107,4 +106,3 @@ namespace Cuku.ECS
 #endif
     }
 }
-#endif

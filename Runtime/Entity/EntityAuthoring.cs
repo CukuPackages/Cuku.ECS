@@ -1,4 +1,3 @@
-#if CUKU_ECS
 using UnityEngine;
 using Entitas;
 using System;
@@ -27,4 +26,3 @@ namespace Cuku.ECS
         }
     }
 }
-#endif
