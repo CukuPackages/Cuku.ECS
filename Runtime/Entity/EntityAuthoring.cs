@@ -14,7 +14,7 @@ namespace Cuku.ECS
         [SerializeField, Tooltip("Destroy after Entity is created")]
         bool destroy = true;
 
-        private void Start()
+        private void Awake()
         {
             if (string.IsNullOrEmpty(Context))
             {
@@ -22,7 +22,7 @@ namespace Cuku.ECS
                 return;
             }
             Context.ToContext().CreateEntity(Components);
-            if (destroy) Destroy(this.gameObject);
+            if (destroy) Destroy(this);
         }
     }
 }
