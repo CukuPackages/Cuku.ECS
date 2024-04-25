@@ -1,4 +1,4 @@
-#if ODIN_INSPECTOR && CUKU_ECS
+#if ODIN_INSPECTOR
 using Sirenix.Utilities.Editor;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -25,5 +25,4 @@ namespace Cuku.ECS
         }
     }
 }
-
 #endif

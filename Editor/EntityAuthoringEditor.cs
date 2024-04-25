@@ -1,4 +1,3 @@
-#if CUKU_ECS
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
@@ -61,4 +60,3 @@ namespace Cuku.ECS
         }
     }
 }
-#endif

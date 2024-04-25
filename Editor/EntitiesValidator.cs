@@ -1,4 +1,4 @@
-#if ODIN_INSPECTOR && CUKU_ECS
+#if ODIN_INSPECTOR
 using Sirenix.OdinInspector.Editor;
 using Sirenix.Utilities.Editor;
 using Sirenix.OdinInspector;
