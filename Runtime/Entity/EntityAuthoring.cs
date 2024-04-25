@@ -14,7 +14,7 @@ namespace Cuku.ECS
         [SerializeField, Tooltip("Destroy after Entity is created")]
         bool destroy = true;
 
-        private void Awake()
+        private void OnEnable()
         {
             if (string.IsNullOrEmpty(Context))
             {
