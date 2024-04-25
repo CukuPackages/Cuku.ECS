@@ -1,4 +1,5 @@
 using Entitas;
+using Entitas.Unity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -95,6 +96,17 @@ namespace Cuku.ECS
             }
 
             return contextArchetypes;
+        }
+
+        public static void ContextObserverBehaviour(this IContext context)
+        {
+            bool exists = false;
+            foreach (var observer in UnityEngine.GameObject.FindObjectsOfType<Entitas.Unity.ContextObserverBehaviour>())
+            {
+                if (observer.Context.GetType() == context.GetType())
+                    exists = true;
+            }
+            if (!exists) context.CreateContextObserver();
         }
 
         private static MethodInfo GetEntitiesMethod(this Type contextType, int parameters = 0)
