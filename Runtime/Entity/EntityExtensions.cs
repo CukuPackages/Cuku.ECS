@@ -169,5 +169,8 @@ namespace Cuku.ECS
             }
             return indices.ToArray();
         }
+
+        public static string Name(this IComponent Component)
+            => Component.GetType().Name.Replace(nameof(Component), "");
     }
 }
