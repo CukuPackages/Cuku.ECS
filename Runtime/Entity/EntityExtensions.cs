@@ -14,6 +14,22 @@ namespace Cuku.ECS
         public static bool HasComponent(this Entity entity, IComponent component)
             => entity.HasComponent(Array.IndexOf(entity.ContextInfo.ComponentTypes, component.GetType()));
 
+        public static bool HasAnyComponent(this Entity entity, IComponent[] components)
+        {
+            foreach (var layer in components)
+                if (entity.HasComponent(layer))
+                    return true;
+            return false;
+        }
+
+        public static IComponent GetAnyComponent(this Entity entity, IComponent[] components)
+        {
+            foreach (var layer in components)
+                if (entity.HasComponent(layer))
+                    return layer;
+            return default;
+        }
+
         public static IComponent GetComponent(string name)
         {
             foreach (var type in AppDomain.CurrentDomain.GetAssemblies().SelectMany(assembly => assembly.GetTypes()))

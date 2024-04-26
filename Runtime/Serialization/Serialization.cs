@@ -1,9 +1,6 @@
-#if ODIN_INSPECTOR
 using Entitas;
 using Newtonsoft.Json;
-using Sirenix.Utilities;
 using System.Collections.Generic;
-using static Cuku.Assets.Assets;
 
 namespace Cuku.ECS
 {
@@ -14,12 +11,21 @@ namespace Cuku.ECS
             TypeNameHandling = TypeNameHandling.Auto,
         };
 
+        // TODO: revive this if needed
         /// <summary>
-        /// Deserialize contextTypes from Json asset and create their entities.
+        /// Deserialize context types from Json asset and create their entities.
         /// </summary>
-        public static async void LoadEntitiesAsync(string key)
-            => (await key.LoadTextAsync()).DeserializeContexts()
-                .ForEach(contextData => contextData.ContextType().CreateEntities(contextData.Entities));
+        //public static async void LoadEntitiesAsync(string key)
+        //    => (await key.LoadTextAsync()).DeserializeContexts()
+        //        .ForEach(contextData => contextData.ContextType().CreateEntities(contextData.Entities));
+
+        public static string SerliazeEntities(this IContext context, Formatting formatting = Formatting.None, params IComponent[][] entities)
+            => SerializeContextsData(formatting,
+                new ContextData()
+                {
+                    Context = context.GetType().Name,
+                    Entities = entities
+                });
 
         /// <summary>
         /// Serialize all entities in <paramref name="contexts"/> to Json.
@@ -41,15 +47,11 @@ namespace Cuku.ECS
                 {
                     var components = new List<IComponent>();
                     foreach (var component in entities[j].GetComponents())
-                    {
                         if (component != null && component.GetType().IsDefined(typeof(SerializableAttribute), false))
                             components.Add(component);
-                    }
 
                     if (components.Count > 0)
-                    {
                         serializedEntities.Add(components.ToArray());
-                    }
                 }
 
                 serializedContext.Entities = serializedEntities.ToArray();
@@ -73,4 +75,3 @@ namespace Cuku.ECS
             => JsonConvert.DeserializeObject<ContextData[]>(data, serializerSettings);
     }
 }
-#endif
