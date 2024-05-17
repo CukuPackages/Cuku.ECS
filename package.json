@@ -1,11 +1,12 @@
 {
   "name": "com.cuku.ecs",
-  "version": "24.1.28",
-  "displayName": "Cuku.ECS",
+  "version": "24.5.14",
+  "displayName": "ECS",
   "description": "ECS Extensions.",
-  "unity": "2023.3",
+  "unity": "2022.3",
   "documentationUrl": "https://github.com/CukuHub/ECS.git",
   "author": {
     "name": "Cuku"
-  }
+  },
+  "unityRelease": "24f1"
 }
