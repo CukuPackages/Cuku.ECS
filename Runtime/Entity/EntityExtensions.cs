@@ -24,9 +24,9 @@ namespace Cuku.ECS
 
         public static IComponent GetAnyComponent(this Entity entity, IComponent[] components)
         {
-            foreach (var layer in components)
-                if (entity.HasComponent(layer))
-                    return layer;
+            foreach (var component in components)
+                if (entity.HasComponent(component))
+                    return component;
             return default;
         }
 
