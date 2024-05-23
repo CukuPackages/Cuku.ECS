@@ -139,6 +139,15 @@ namespace Cuku.ECS
             => context.CreateEntity().AddComponents(componentIndices);
 
         /// <summary>
+        /// Create entities from serialized <see cref="ContextData"/>.
+        /// </summary>
+        public static void CreateEntities(string data)
+        {
+            foreach (var contextData in data.DeserializeContexts())
+                contextData.ContextType().CreateEntities(contextData.Entities);
+        }
+
+        /// <summary>
         /// Create <see cref="Entity"/> collection in <paramref name="context"/>.
         /// </summary>
         public static void CreateEntities(this Type context, params IComponent[][] entities)
