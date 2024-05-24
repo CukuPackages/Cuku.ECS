@@ -128,15 +128,23 @@ namespace Cuku.ECS
         /// Create <see cref="Entity"/> in <paramref name="context"/>
         /// and add <paramref name="components"/>.
         /// </summary>
-        public static void CreateEntity(this IContext context, params IComponent[] components)
-            => context.CreateEntity().AddComponents(components);
+        public static Entity CreateEntity(this IContext context, params IComponent[] components)
+        {
+            var entity = context.CreateEntity();
+            entity.AddComponents(components);
+            return entity;
+        }
 
         /// <summary>
         /// Create <see cref="Entity"/> in <paramref name="context"/>
         /// and add <see cref="IComponent"/>s from <paramref name="componentIndices"/>.
         /// </summary>
-        public static void CreateEntity(this IContext context, params int[] componentIndices)
-            => context.CreateEntity().AddComponents(componentIndices);
+        public static Entity CreateEntity(this IContext context, params int[] componentIndices)
+        {
+            var entity = context.CreateEntity();
+            entity.AddComponents(componentIndices);
+            return entity;
+        }
 
         /// <summary>
         /// Create entities from serialized <see cref="ContextData"/>.
