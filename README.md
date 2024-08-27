@@ -12,8 +12,5 @@ ECS Extensions.
 
 [Assets](https://github.com/CukuHub/Assets.git)
 
-# Instructions
 > [!IMPORTANT]
-> Contexts must be initialized before opening ECS - Entities Editor.
-> 
-> To do this create an Editor Script that calls on Editor start the partial class ContextInitialization which initializes the contexts (create on project level).
+> Add [EntitasSettings](https://github.com/CukuPackages/EntitasSettings) to refresh Contexts while working in the Editor
