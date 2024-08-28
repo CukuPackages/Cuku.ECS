@@ -101,7 +101,7 @@ namespace Cuku.ECS
         public static void ContextObserverBehaviour(this IContext context)
         {
             bool exists = false;
-            foreach (var observer in UnityEngine.GameObject.FindObjectsOfType<Entitas.Unity.ContextObserverBehaviour>())
+            foreach (var observer in UnityEngine.Object.FindObjectsByType<ContextObserverBehaviour>(sortMode: UnityEngine.FindObjectsSortMode.None))
             {
                 if (observer.Context.GetType() == context.GetType())
                     exists = true;
