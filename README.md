@@ -1,16 +1,19 @@
-# ECS
-ECS Extensions.
+## Installation
+1. Open Git Bash / Terminal at the project root
+2. Add submodule
+   ```
+   git submodule add https://github.com/CukuPackages/com.cuku.ecs.git Packages/com.cuku.ecs
+   ```
 
-# Dependencies
-[Entitas](https://github.com/sschmid/Entitas)
+## Dependencies
+[DesperateDevs](https://github.com/CukuPackages/com.sschmid.entitas)
+
+[Entitas](https://github.com/CukuPackages/com.sschmid.entitas)
 
 [Unity SerializeReferenceExtensions](https://github.com/mackysoft/Unity-SerializeReferenceExtensions)
 
-[UniTask](https://github.com/Cysharp/UniTask?path=src/UniTask/Assets/Plugins/UniTask)
-
 [Newtonsoft Json](https://docs.unity3d.com/Packages/com.unity.nuget.newtonsoft-json@latest)
 
-[Assets](https://github.com/CukuHub/Assets.git)
+[Addressables](https://docs.unity3d.com/Packages/com.unity.addressables@latest)
 
-> [!IMPORTANT]
-> Add [EntitasSettings](https://github.com/CukuPackages/EntitasSettings) to refresh Contexts while working in the Editor
+[UniTask](https://github.com/Cysharp/UniTask?path=src/UniTask/Assets/Plugins/UniTask)
