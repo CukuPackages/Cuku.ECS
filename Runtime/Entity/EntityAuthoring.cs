@@ -6,13 +6,14 @@ namespace Cuku.ECS
 {
     public class EntityAuthoring : MonoBehaviour
     {
-        public string Context;
+        [SerializeField] string description;
+        [SerializeField] bool destroy = true;
+
+        [SerializeField, Space] public string Context;
 
         [SerializeReference, SubclassSelector]
         public IComponent[] Components = Array.Empty<IComponent>();
 
-        [SerializeField, Tooltip("Destroy after Entity is created")]
-        bool destroy = true;
 
         private void OnEnable()
         {
@@ -21,7 +22,7 @@ namespace Cuku.ECS
                 Debug.LogError("Context is not set!");
                 return;
             }
-            Context.ToContext().CreateEntity(Components);
+            Context.ToContext()?.CreateEntity(Components);
             if (destroy) Destroy(this);
         }
     }

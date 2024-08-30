@@ -29,15 +29,11 @@ namespace Cuku.ECS
                 .ToArray();
         }
 
+        /// <summary>
+        /// Get all contexts
+        /// </summary>
         public static IContext[] Contexts()
-        {
-            var contexts = new IContext[contextTypes.Length];
-            for (int i = 0; i < contextTypes.Length; i++)
-            {
-                contexts[i] = (IContext)contextTypes[i].Instance();
-            }
-            return contexts;
-        }
+            => contextTypes.Select(type => (IContext)type.Instance()).ToArray();
 
         /// <summary>
         /// Get Context Instance from Context Type.
@@ -55,11 +51,35 @@ namespace Cuku.ECS
         public static Type ContextType(this ContextData data)
             => Array.Find(contextTypes, match => match.FullName == data.Context);
 
+        /// <summary>
+        /// Get Context type.
+        /// </summary>
         public static Type ContextType(this string context)
             => Array.Find(contextTypes, match => match.FullName == context);
 
+        /// <summary>
+        /// Convert to <see cref="IContext"/>
+        /// </summary>
         public static IContext ToContext(this string context)
-            => context.ContextType().Instance() as IContext;
+        {
+            if (!contextTypes.Any(type => type.Name == context))
+            {
+                UnityEngine.Debug.LogWarning($"\"{context}\" is not a vaild Context");
+                return null;
+            }
+            return context.ContextType().Instance() as IContext;
+        }
+
+        /// <summary>
+        /// Does context exist?
+        /// </summary>
+        public static bool Exists(this string context)
+        {
+            if (string.IsNullOrEmpty(context))
+                return false;
+
+            return Contexts().Any(existingContext => existingContext == context.ToContext());
+        }
 
         public static Dictionary<string, IComponent[]> GetArchetypes()
         {
