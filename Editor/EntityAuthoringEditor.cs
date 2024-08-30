@@ -15,28 +15,44 @@ namespace Cuku.ECS
             var hiddenComponents = string.Empty;
 
             GUILayout.BeginVertical();
-                        
+
             if (!entity.Context.Exists()) // Context
             {
                 EditorGUILayout.HelpBox("Context is not valid", MessageType.Error);
                 hiddenComponents = nameof(entity.Components);
             }
             else // Components
-            {                
+            {
                 GUILayout.Space(20);
                 if (!string.IsNullOrEmpty(entity.Context))
                 {
-                    var invalidComponents = new List<string>();
+                    var nonContextComponents = new List<string>();
+
+                    var duplicateComponents = new List<string>();
+                    var componentTypeSet = new HashSet<System.Type>();
+
                     for (int i = 0; i < entity.Components.Length; i++)
                     {
                         var component = entity.Components[i];
+
+                        // Check if component is part of the context
                         if (component == null ||
                             !entity.Context.ToContext().ContextInfo.ComponentTypes.Any(c => c == component.GetType()))
-                            invalidComponents.Add($"Element {i} - {component?.ToString()}");
+                            nonContextComponents.Add($"Element {i} - {component?.ToString()}");
+
+                        // Check for duplicate components
+                        if (component != null && !componentTypeSet.Add(component.GetType()))
+                            duplicateComponents.Add($"Element {i} - {component?.ToString()}");
                     }
-                    if (invalidComponents.Count > 0)
+
+                    if (nonContextComponents.Count > 0)
                         EditorGUILayout.HelpBox($"Components are not defined in {entity.Context}:\n" +
-                            $"{invalidComponents.Aggregate((c, n) => $"{c}\n{n}")}",
+                            $"{nonContextComponents.Aggregate((c, n) => $"{c}\n{n}")}",
+                            MessageType.Error);
+
+                    if (duplicateComponents.Count > 0)
+                        EditorGUILayout.HelpBox($"There are duplicate components:\n" +
+                            $"{duplicateComponents.Aggregate((c, n) => $"{c}\n{n}")}",
                             MessageType.Error);
                 }
             }
