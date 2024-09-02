@@ -23,7 +23,6 @@ namespace Cuku.ECS
             }
             else // Components
             {
-                GUILayout.Space(20);
                 if (!string.IsNullOrEmpty(entity.Context))
                 {
                     var nonContextComponents = new List<string>();

@@ -7,7 +7,6 @@ namespace Cuku.ECS
     public class EntityAuthoring : MonoBehaviour
     {
         [SerializeField] string description;
-        [SerializeField] bool destroy = true;
 
         [SerializeField, Space] public string Context;
 
@@ -23,7 +22,7 @@ namespace Cuku.ECS
                 return;
             }
             Context.ToContext()?.CreateEntity(Components);
-            if (destroy) Destroy(this);
+            Destroy(this);
         }
     }
 }
