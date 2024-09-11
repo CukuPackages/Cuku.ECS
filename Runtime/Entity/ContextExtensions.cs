@@ -92,9 +92,7 @@ namespace Cuku.ECS
                 var getEntitiesMethod = contextType.GetEntitiesMethod();
 
                 foreach (var entity in (Entity[])getEntitiesMethod.Invoke(contextInstance, null))
-                {
                     archetypeIndexes.Add(entity.GetComponentIndexes());
-                }
 
                 // Get archtypes as Components
                 var componentTypes = ((IContext)contextInstance).ContextInfo.ComponentTypes;
@@ -105,9 +103,7 @@ namespace Cuku.ECS
                 {
                     var components = new IComponent[archetype.Length];
                     for (int i = 0; i < archetype.Length; i++)
-                    {
                         components[i] = Activator.CreateInstance(componentTypes[archetype[i]]) as IComponent;
-                    }
                     archteypeComponents = components;
                     archetypeCount++;
                 }
@@ -122,11 +118,11 @@ namespace Cuku.ECS
         {
             bool exists = false;
             foreach (var observer in UnityEngine.Object.FindObjectsByType<ContextObserverBehaviour>(sortMode: UnityEngine.FindObjectsSortMode.None))
-            {
                 if (observer.Context.GetType() == context.GetType())
                     exists = true;
-            }
-            if (!exists) context.CreateContextObserver();
+
+            if (!exists) 
+                context.CreateContextObserver();
         }
 
         private static MethodInfo GetEntitiesMethod(this Type contextType, int parameters = 0)
@@ -167,24 +163,13 @@ namespace Cuku.ECS
         }
 
         /// <summary>
-        /// Create entities from serialized <see cref="ContextData"/>.
-        /// </summary>
-        public static void CreateEntities(string data)
-        {
-            foreach (var contextData in data.DeserializeContexts())
-                contextData.ContextType().CreateEntities(contextData.Entities);
-        }
-
-        /// <summary>
         /// Create <see cref="Entity"/> collection in <paramref name="context"/>.
         /// </summary>
         public static void CreateEntities(this Type context, params IComponent[][] entities)
         {
             var createdEntities = context.CreateEntities(entities.Length);
             for (int i = 0; i < createdEntities.Length; i++)
-            {
                 createdEntities[i].AddComponents(entities[i]);
-            }
         }
 
         /// <summary>
@@ -200,9 +185,7 @@ namespace Cuku.ECS
             var createEntityMethod = context.GetType().GetMethod(createEntityMethodName);
 
             for (int i = 0; i < count; i++)
-            {
                 entities[i] = (Entity)createEntityMethod.Invoke(contextInstance, null);
-            }
             return entities;
         }
 

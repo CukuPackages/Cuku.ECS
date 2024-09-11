@@ -33,13 +33,9 @@ namespace Cuku.ECS
         public static IComponent GetComponent(string name)
         {
             foreach (var type in AppDomain.CurrentDomain.GetAssemblies().SelectMany(assembly => assembly.GetTypes()))
-            {
                 if (typeof(IComponent).IsAssignableFrom(type) && !type.IsInterface && type.Name == name)
-                {
                     return (IComponent)Activator.CreateInstance(type);
-                }
-            }
-            return null; // SHOULD NEVER HAPPEN
+            return null; // MUST NEVER HAPPEN!
         }
 
         /// <summary>
@@ -53,9 +49,7 @@ namespace Cuku.ECS
                 var component = components[i];
                 var index = Array.IndexOf(componentTypes, component.GetType());
                 if (!entity.HasComponent(index))
-                {
                     entity.AddComponent(index, component);
-                }
             }
         }
 
@@ -71,9 +65,7 @@ namespace Cuku.ECS
                 var index = indices[i];
                 var component = entity.CreateComponent(index, componentTypes[index]);
                 if (!entity.HasComponent(index))
-                {
                     entity.AddComponent(index, component);
-                }
             }
         }
 
@@ -88,9 +80,7 @@ namespace Cuku.ECS
                 var component = components[i];
                 var index = Array.IndexOf(componentTypes, component.GetType());
                 if (entity.HasComponent(index))
-                {
                     entity.RemoveComponent(index);
-                }
             }
         }
 
@@ -105,9 +95,7 @@ namespace Cuku.ECS
                 var component = components[i];
                 var index = Array.IndexOf(componentTypes, component.GetType());
                 if (!entity.HasComponent(index))
-                {
                     entity.ReplaceComponent(index, component);
-                }
             }
         }
 
@@ -118,9 +106,7 @@ namespace Cuku.ECS
         {
             var remainderComponents = new List<IComponent>();
             for (int i = 0; i < entities.Length; i++)
-            {
                 remainderComponents.AddRange(entities[i].SubtractComponents(indices));
-            }
             return remainderComponents;
         }
 
@@ -136,17 +122,13 @@ namespace Cuku.ECS
                 var entityIndex = componentIndices[i];
                 var found = false;
                 for (var j = 0; j < indices.Length; j++)
-                {
                     if (entityIndex == indices[j])
                     {
                         found = true;
                         break;
                     }
-                }
                 if (!found)
-                {
                     remainderIndices.Add(entityIndex);
-                }
             }
 
             var remainderComponents = new IComponent[remainderIndices.Count];
@@ -159,14 +141,15 @@ namespace Cuku.ECS
             return remainderComponents;
         }
 
+        public static IComponent[][] ToComponents(this Entity[] entities)
+            => entities.Select(entity => entity.GetComponents()).ToArray();
+
         public static int[] Indices(this Entity entity, params IComponent[] components)
         {
             var indices = new List<int>();
             var componentTypes = entity.ContextInfo.ComponentTypes;
             foreach (var component in components)
-            {
                 indices.Add(Array.IndexOf(componentTypes, component.GetType()));
-            }
             return indices.ToArray();
         }
 

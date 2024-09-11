@@ -1,3 +1,4 @@
+using Cuku.Assets;
 using Entitas;
 using Newtonsoft.Json;
 using System.Collections.Generic;
@@ -11,15 +12,25 @@ namespace Cuku.ECS
             TypeNameHandling = TypeNameHandling.Auto,
         };
 
-        // TODO: revive this if needed
         /// <summary>
         /// Deserialize context types from Json asset and create their entities.
         /// </summary>
-        //public static async void LoadEntitiesAsync(string key)
-        //    => (await key.LoadTextAsync()).DeserializeContexts()
-        //        .ForEach(contextData => contextData.ContextType().CreateEntities(contextData.Entities));
+        public static async void LoadEntities(this string key)
+        {
+            foreach (var context in (await key.LoadTextAsync()).DeserializeContexts())
+                context.CreateEntities();
+        }
 
-        public static string SerliazeEntities(this IContext context, Formatting formatting = Formatting.None, params IComponent[][] entities)
+        /// <summary>
+        /// Create entities from serialized <see cref="ContextData"/>.
+        /// </summary>
+        public static void CreateEntities(this string data)
+        {
+            foreach (var context in data.DeserializeContexts())
+                context.CreateEntities();
+        }
+
+        public static string SerializeEntities(this IContext context, Formatting formatting = Formatting.None, params IComponent[][] entities)
             => SerializeContextsData(formatting,
                 new ContextData()
                 {
@@ -62,16 +73,19 @@ namespace Cuku.ECS
         }
 
         /// <summary>
-        /// Serialize all entities in <paramref name="contextsData"/> to Json.
-        /// </summary>
-        /// <param name="formatting">Json formatting.</param>
-        public static string SerializeContextsData(Formatting formatting = Formatting.None, params ContextData[] contextsData)
-            => JsonConvert.SerializeObject(contextsData, formatting, serializerSettings);
-
-        /// <summary>
         /// Deserialize <see cref="ContextData"/> from json asset.
         /// </summary>
         public static ContextData[] DeserializeContexts(this string data)
             => JsonConvert.DeserializeObject<ContextData[]>(data, serializerSettings);
+
+        private static void CreateEntities(this ContextData context)
+            => context.ContextType().CreateEntities(context.Entities);
+
+        /// <summary>
+        /// Serialize all entities in <paramref name="contextsData"/> to Json.
+        /// </summary>
+        /// <param name="formatting">Json formatting.</param>
+        private static string SerializeContextsData(Formatting formatting = Formatting.None, params ContextData[] contextsData)
+            => JsonConvert.SerializeObject(contextsData, formatting, serializerSettings);
     }
 }
