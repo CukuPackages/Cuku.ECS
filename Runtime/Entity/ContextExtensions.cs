@@ -87,7 +87,7 @@ namespace Cuku.ECS
             foreach (var contextType in contextTypes)
             {
                 // Get archetypes as indexes
-                var archetypeIndexes = new HashSet<int[]>(new ArrayEqualityComparer<int>());
+                var archetypeIndexes = new HashSet<int[]>(new Utilities.ArrayEqualityComparer<int>());
                 var contextInstance = contextType.Instance();
                 var getEntitiesMethod = contextType.GetEntitiesMethod();
 

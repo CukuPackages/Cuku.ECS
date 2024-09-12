@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Cuku.ECS
+namespace Cuku.Utilities
 {
     public class ArrayEqualityComparer<T> : IEqualityComparer<T[]>
     {

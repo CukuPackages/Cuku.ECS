@@ -5,7 +5,7 @@ using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.SceneManagement;
 
-namespace Cuku.Assets
+namespace Cuku.Utilities
 {
     /// <summary>
     /// Addressable assets utilities.
