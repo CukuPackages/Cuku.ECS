@@ -2,7 +2,7 @@
 1. Open Git Bash / Terminal at the project root
 2. Add submodule
    ```
-   git submodule add https://github.com/CukuPackages/com.cuku.ecs.git Packages/com.cuku.ecs
+   git submodule add https://github.com/CukuPackages/Cuku.ECS.git Packages/com.cuku.ecs
    ```
 
 ## Dependencies
